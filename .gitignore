@@ -1,0 +1,11 @@
+.directory
+.DS_Store
+applet
+README.md
+application.linux32
+application.linux64
+application.windows32
+application.windows64
+application.macosx
+*.zip
+otros/*
