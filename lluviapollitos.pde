@@ -36,7 +36,7 @@ public String camPara = "camera_para.dat";
 //public String proyectPath = sketchPath("/home/fzzio/sketchbook/proyectos/lluviapollitos/");
 public String proyectPath = "";
 
-//Imagenes, Videos y Fuentes
+// Imagenes, Videos y Fuentes
 int tamanoBebas = 160, tamanoTitan = 160;
 public PFont fuenteBebas, fuenteTitan;
 public Movie videoIntro;
@@ -46,13 +46,15 @@ public int posXNubes[] = {-200, 200, 900, 600};
 public PImage imgBGSplash, imgBGMecanica, imgBGCampo, imgBGCielo, imgNidoA, imgNidoB, imgNidoVacio, imgContadorA, imgContadorB, imgGallina, imgPollo, imgPolloEnNido, imgTiempo, imgError, imgFlechaIzq, imgFlechaDer;
 
 
-//Objeto de NYARTOOL
+// Objeto de NYARTOOL
 public MultiMarker nya;
 
-//Estado del juego
+// Estado del juego
 public final int ESTADO_INTRO = 0, ESTADO_INSTRUCCIONES = 1, ESTADO_JUGANDO = 2, ESTADO_RESUMEN = 3, ESTADO_STAND_BY = 4;
 public int estadoActualJuego = ESTADO_INTRO;
 
+// Puntajes
+public int puntosA = 0, puntosB = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +105,8 @@ void draw(){
     case ESTADO_JUGANDO: 
       verPantallaJuego();
       break;
-    case ESTADO_RESUMEN: 
+    case ESTADO_RESUMEN:
+      puntosA = 90; puntosB = 50;
       verPantallaResumen();
       break;
     case ESTADO_STAND_BY: 
@@ -154,6 +157,8 @@ void keyPressed(){
 // Pantalla con video de introducción
 public void verPantallaIntro(){
   //println("Mostrando Intro");
+  videoIntro.stop();
+
   pushMatrix();
     loadPixels();
     image(imgBGSplash, 0, 0, winWidth, winHeight);
@@ -239,6 +244,48 @@ public void verPantallaResumen(){
     translate(((winWidth - anchoGallinaNuevo ) / 2) + 100, ((winHeight - altoGallinaNuevo ) / 2) + 230, 0);
     text("Fin del Juego", 0, 0);
     noFill();
+  popMatrix();
+  
+  float anchoContadorA = imgContadorA.width * 0.80;
+  float altoContadorA = imgContadorA.height * 0.80;
+  int posXA = (int) ((winWidth - anchoContadorA ) / 4);
+  int posYA = (int) (((winHeight - altoContadorA ) / 2) + 250 );
+
+  float anchoContadorB = imgContadorB.width * 0.80;
+  float altoContadorB  = imgContadorB.height * 0.80;
+  int posXB = (int) ((winWidth - anchoContadorB ) / 4) * 3;
+  int posYB = (int) (((winHeight - altoContadorB ) / 2) + 250 );
+  pushMatrix();
+  
+    loadPixels();
+    textFont(fuenteBebas, 60);
+    textAlign(CENTER);
+    fill(250, 250, 250);
+    
+    // puntaje A
+    image(imgContadorA, posXA, posYA, anchoContadorA, altoContadorA);
+    text(puntosA, posXA + 40, posYA + 60);
+
+    image(imgContadorB, posXB , posYB, anchoContadorB, altoContadorB );
+    text(puntosB, posXB + 40, posYB + 60);
+    
+    noFill();
+  popMatrix();
+
+  pushMatrix();
+    loadPixels();
+
+    float anchoFlecha = imgFlechaIzq.width * 0.80;
+    float altoFlecha  = imgFlechaIzq.height * 0.80;
+
+    if (puntosA > puntosB) {
+      image(imgFlechaIzq, ((winWidth - anchoFlecha ) / 2), posYA + 40, anchoFlecha, altoFlecha);
+    }else if (puntosA < puntosB) {
+      image(imgFlechaDer, ((winWidth - anchoFlecha ) / 2), posYA + 40, anchoFlecha, altoFlecha);
+    }else{
+      //
+    }
+
   popMatrix();
 }
 
