@@ -12,6 +12,17 @@ class Pollo{
     // constructor vacio
   }
   
+  Pollo(int limiteMinX, int limiteMaxX, int limiteMaxY){
+    this();
+    setLimiteMinX(limiteMinX);
+    setLimiteMaxX(limiteMaxX);
+    setLimiteMaxY(limiteMaxY);
+    setVelocidad(0);
+    cayendo = false;
+    setPosX((int)random(limiteMinX, limiteMaxX));
+    setPosY(0);
+  }
+  
   Pollo(PImage imgPollo, int limiteMinX, int limiteMaxX, int limiteMaxY){
     this();
     setImgPollo(imgPollo);

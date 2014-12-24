@@ -60,7 +60,7 @@ public int puntosA = 0, puntosB = 0;
 public Jugador jugadorA, jugadorB;
 public ArrayList pollosA, pollosB, objetosError;
 public Nido nidoA, nidoB;
-public Timer timer;
+public Timer timerJuego, timerPantallas;
 
 int totalPollos = 50, totalObjerror = 50;
 int velocidad = 2;
@@ -94,7 +94,8 @@ void setup(){
   cargarVideos();
   
   // Se setea el tiempo que dura el Juego
-  timer = new Timer(1000 * 60); // 60 segundos
+  timerJuego = new Timer(1000 * 60); // 60 segundos
+  timerPantallas = new Timer(1000 * 5); // 60 segundos
 
   // Instaciamos objetos y variables para el juego
   nidoA = new Nido(imgNidoA, 0, (winWidth / 2) );
@@ -151,11 +152,13 @@ void keyPressed(){
   println("Presiono " + key);
   if(key == '1'){
     estadoActualJuego = ESTADO_INTRO;
+    timerPantallas.start();
   }else if(key == '2'){
     estadoActualJuego = ESTADO_INSTRUCCIONES;
+    timerPantallas.start();
   }else if(key == '3'){
     estadoActualJuego = ESTADO_JUGANDO;
-    timer.start();
+    timerJuego.start();
   }else if(key == '4'){
     estadoActualJuego = ESTADO_RESUMEN;
   }else if(key == '5'){
@@ -188,6 +191,11 @@ public void verPantallaIntro(){
     loadPixels();
     image(imgBGSplash, 0, 0, winWidth, winHeight);
   popMatrix();
+
+  if(timerPantallas.isFinished()){
+    estadoActualJuego = ESTADO_INSTRUCCIONES;
+    timerPantallas.start();
+  }
 }
 
 // Pantalla con juego
@@ -228,6 +236,10 @@ public void verPantallaInstrucciones(){
     noFill();
   popMatrix();
   
+  if(timerPantallas.isFinished()){
+    estadoActualJuego = ESTADO_JUGANDO;
+    timerJuego.start();
+  }
 }
 
 
@@ -240,8 +252,9 @@ public void verPantallaJuego(){
   // Dibujamos la interfaz
   dibujarInterfazJuego();
 
-  if(timer.isFinished()){
+  if(timerJuego.isFinished()){
     estadoActualJuego = ESTADO_RESUMEN;
+    timerPantallas.start();
   }
 
 
@@ -310,10 +323,13 @@ public void verPantallaResumen(){
     }else if (puntosA < puntosB) {
       image(imgFlechaDer, ((winWidth - anchoFlecha ) / 2), posYA + 40, anchoFlecha, altoFlecha);
     }else{
-      //
+      // TODO
     }
-
   popMatrix();
+
+  if(timerJuego.isFinished()){
+    estadoActualJuego = ESTADO_STAND_BY;
+  }
 }
 
 // Pantalla con resumen con video StandBy
@@ -477,7 +493,7 @@ void dibujarInterfazJuego() {
     image(imgBGCampo, 0, abs(winHeight - altoCampoNuevo) + 50, winWidth, altoCampoNuevo);
   popMatrix();
 
-  // Dividir Pantalla y mostrar el timer
+  // Dividir Pantalla y mostrar el timerJuego
   pushMatrix();
     loadPixels();
     float altoSeparadorNuevo = imgSeparador.height * 0.70;
@@ -485,7 +501,7 @@ void dibujarInterfazJuego() {
     image(imgSeparador, ((winWidth - anchoSeparadorNuevo ) / 2), abs(winHeight - altoCampoNuevo), anchoSeparadorNuevo, altoCampoNuevo);
     
     fill(0, 0, 0);
-      text(" " + timer.getSegundosRestantes(), ((winWidth - anchoSeparadorNuevo ) / 2 + 40), 100 );
+      text(" " + timerJuego.getSegundosRestantes(), ((winWidth - anchoSeparadorNuevo ) / 2 + 40), 100 );
     noFill();
   popMatrix();
 

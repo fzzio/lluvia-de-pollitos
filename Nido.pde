@@ -8,6 +8,14 @@ class Nido{
   Nido(){
     // Constructor vacio
   }
+
+  Nido(int limiteMinX, int limiteMaxX){
+    this();
+    setLimiteMinX(limiteMinX);
+    setLimiteMaxX(limiteMaxX);
+    setPosY(height-imgNido.height);
+    setPosX((getLimiteMaxX() - getLimiteMinX()) / 2);
+  }
   
   Nido(PImage imgNido, int limiteMinX, int limiteMaxX){
     this();
