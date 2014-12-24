@@ -43,7 +43,7 @@ public Movie videoIntro;
 public PImage[] imgObjetosError = new PImage[5];
 public PImage[] imgNubes = new PImage[4];
 public int posXNubes[] = {-200, 200, 900, 600};
-public PImage imgBGSplash, imgBGMecanica, imgBGCampo, imgBGCielo, imgNidoA, imgNidoB, imgNidoVacio, imgContadorA, imgContadorB, imgGallina, imgPollo, imgPolloEnNido, imgSeparador, imgError, imgFlechaIzq, imgFlechaDer;
+public PImage imgBGSplash, imgBGMecanica, imgBGCampo, imgBGCielo, imgNidoA, imgNidoB, imgNidoVacio, imgContadorA, imgContadorB, imgGallina, imgPolloCayendo, imgPolloAtrapado, imgPolloEnNido, imgSeparador, imgError, imgFlechaIzq, imgFlechaDer;
 
 
 // Objeto de NYARTOOL
@@ -55,6 +55,16 @@ public int estadoActualJuego = ESTADO_INTRO;
 
 // Puntajes
 public int puntosA = 0, puntosB = 0;
+
+// Variables del juego
+public Jugador jugadorA, jugadorB;
+public ArrayList pollosA, pollosB, objetosError;
+public Nido nidoA, nidoB;
+public Timer timer;
+
+int totalPollos = 50, totalObjerror = 50;
+int velocidad = 2;
+int atrapadosPollosA = 0, atrapadosPollosB = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -76,7 +86,6 @@ void setup(){
   size(winWidth, winHeight, P3D);
   //size(winWidth,winHeight,OPENGL);//tamaños de la pantalla
   frameRate(90);// para mejorar la velocidad de la imagen por cuadro  o 30
-  
 
   //Cargamos Data para el juego
   cargarFuentes();
@@ -84,7 +93,22 @@ void setup(){
   cargarImagenes();
   cargarVideos();
   
+  // Se setea el tiempo que dura el Juego
+  timer = new Timer(1000 * 60); // 60 segundos
 
+  // Instaciamos objetos y variables para el juego
+  nidoA = new Nido(imgNidoA, 0, (winWidth / 2) );
+  nidoB = new Nido(imgNidoB, (winWidth / 2) + 1, winWidth);
+
+  jugadorA = new Jugador();
+  jugadorB = new Jugador();
+
+  pollosA = new ArrayList(totalPollos);
+  pollosB = new ArrayList(totalPollos);
+  for(int i=0; i< totalPollos; i++){
+    pollosA.add(new Pollo(imgPolloCayendo, 0, 418, 590));
+    pollosB.add(new Pollo(imgPolloCayendo, 515, 930, 590));
+  }
 
 }
 
@@ -131,6 +155,7 @@ void keyPressed(){
     estadoActualJuego = ESTADO_INSTRUCCIONES;
   }else if(key == '3'){
     estadoActualJuego = ESTADO_JUGANDO;
+    timer.start();
   }else if(key == '4'){
     estadoActualJuego = ESTADO_RESUMEN;
   }else if(key == '5'){
@@ -215,7 +240,9 @@ public void verPantallaJuego(){
   // Dibujamos la interfaz
   dibujarInterfazJuego();
 
-  
+  if(timer.isFinished()){
+    estadoActualJuego = ESTADO_RESUMEN;
+  }
 
 
 }
@@ -357,7 +384,8 @@ public void cargarImagenes(){
   imgContadorB = loadImage("img/contadorred.png");
   
   imgGallina = loadImage("img/gallina.png");
-  imgPollo = loadImage("img/pollito.png");
+  imgPolloCayendo = loadImage("img/pollito-cayendo.png");
+  imgPolloAtrapado = loadImage("img/pollito-atrapado.png");
   imgPolloEnNido = loadImage("img/pollito-en-el-nido.png");
   
   imgSeparador = loadImage("img/separador.png");
@@ -378,6 +406,8 @@ public void cargarVideos(){
 public void cargarFuentes(){
   fuenteBebas = createFont("fonts/BebasNeue.otf", tamanoBebas, true);
   fuenteTitan = createFont("fonts/TitanOne-Regular.ttf", tamanoTitan, true);
+  stroke(0);
+  strokeWeight(5);
 }
 //////////////////////////////////////////////////////////////////////////////
 
@@ -447,12 +477,45 @@ void dibujarInterfazJuego() {
     image(imgBGCampo, 0, abs(winHeight - altoCampoNuevo) + 50, winWidth, altoCampoNuevo);
   popMatrix();
 
-  //Dividir Pantalla
+  // Dividir Pantalla y mostrar el timer
   pushMatrix();
     loadPixels();
     float altoSeparadorNuevo = imgSeparador.height * 0.70;
     float anchoSeparadorNuevo = imgSeparador.width * 0.70;
     image(imgSeparador, ((winWidth - anchoSeparadorNuevo ) / 2), abs(winHeight - altoCampoNuevo), anchoSeparadorNuevo, altoCampoNuevo);
+    
+    fill(0, 0, 0);
+      text(" " + timer.getSegundosRestantes(), ((winWidth - anchoSeparadorNuevo ) / 2 + 40), 100 );
+    noFill();
+  popMatrix();
+
+
+  // Dibujar contadores de puntajes
+  pushMatrix();
+    float anchoContadorA = imgContadorA.width * 0.80;
+    float altoContadorA = imgContadorA.height * 0.80;
+    int posXA = (int) ( 100 );
+    int posYA = (int) ( 50 );
+    
+    float anchoContadorB = imgContadorB.width * 0.80;
+    float altoContadorB  = imgContadorB.height * 0.80;
+    int posXB = (int) ( winWidth - anchoContadorB - 100 );
+    int posYB = (int) ( 50 );
+  
+    loadPixels();
+    
+    textFont(fuenteBebas, 60);
+    textAlign(CENTER);
+    fill(250, 250, 250);
+    
+    // puntaje A
+    image(imgContadorA, posXA, posYA, anchoContadorA, altoContadorA);
+    text(puntosA, posXA + 40, posYA + 60);
+
+    image(imgContadorB, posXB , posYB, anchoContadorB, altoContadorB );
+    text(puntosB, posXB + 40, posYB + 60);
+    
+    noFill();
   popMatrix();
 }
 
