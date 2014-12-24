@@ -43,7 +43,7 @@ public Movie videoIntro;
 public PImage[] imgObjetosError = new PImage[5];
 public PImage[] imgNubes = new PImage[4];
 public int posXNubes[] = {-200, 200, 900, 600};
-public PImage imgBGSplash, imgBGMecanica, imgBGCampo, imgBGCielo, imgNidoA, imgNidoB, imgNidoVacio, imgContadorA, imgContadorB, imgGallina, imgPollo, imgPolloEnNido, imgTiempo, imgError, imgFlechaIzq, imgFlechaDer;
+public PImage imgBGSplash, imgBGMecanica, imgBGCampo, imgBGCielo, imgNidoA, imgNidoB, imgNidoVacio, imgContadorA, imgContadorB, imgGallina, imgPollo, imgPolloEnNido, imgSeparador, imgError, imgFlechaIzq, imgFlechaDer;
 
 
 // Objeto de NYARTOOL
@@ -360,7 +360,7 @@ public void cargarImagenes(){
   imgPollo = loadImage("img/pollito.png");
   imgPolloEnNido = loadImage("img/pollito-en-el-nido.png");
   
-  imgTiempo = loadImage("img/time.png");
+  imgSeparador = loadImage("img/separador.png");
   imgError = loadImage("img/x.png");
 
   imgFlechaIzq = loadImage("img/arrowleft.png");
@@ -444,7 +444,15 @@ void dibujarInterfazJuego() {
   pushMatrix();
     loadPixels();
     float altoCampoNuevo = imgBGCampo.height * 0.70;
-    image(imgBGCampo, 0, abs(winHeight - altoCampoNuevo), winWidth, altoCampoNuevo);
+    image(imgBGCampo, 0, abs(winHeight - altoCampoNuevo) + 50, winWidth, altoCampoNuevo);
+  popMatrix();
+
+  //Dividir Pantalla
+  pushMatrix();
+    loadPixels();
+    float altoSeparadorNuevo = imgSeparador.height * 0.70;
+    float anchoSeparadorNuevo = imgSeparador.width * 0.70;
+    image(imgSeparador, ((winWidth - anchoSeparadorNuevo ) / 2), abs(winHeight - altoCampoNuevo), anchoSeparadorNuevo, altoCampoNuevo);
   popMatrix();
 }
 
