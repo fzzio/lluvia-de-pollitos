@@ -4,6 +4,7 @@ class Nido{
   private int limiteMaxX;
   private int posX;
   private int posY;
+  private float error;
   
   Nido(){
     // Constructor vacio
@@ -14,7 +15,7 @@ class Nido{
     setLimiteMinX(limiteMinX);
     setLimiteMaxX(limiteMaxX);
     setPosY(height-imgNido.height);
-    setPosX((getLimiteMaxX() - getLimiteMinX()) / 2);
+    setPosX( getLimiteMinX() );
   }
   
   Nido(PImage imgNido, int limiteMinX, int limiteMaxX){
@@ -23,7 +24,22 @@ class Nido{
     setLimiteMinX(limiteMinX);
     setLimiteMaxX(limiteMaxX);
     setPosY(height-imgNido.height);
-    setPosX((getLimiteMaxX() - getLimiteMinX()) / 2);
+    setPosX( getLimiteMinX() );
+  }
+  
+  // Personalizado por la imagen de error
+  Nido(PImage imgNido, int limiteMinX, int limiteMaxX, float proporcion){
+    this();
+    setImgNido(imgNido);
+    
+    //setError(  ( getImgNido().width * proporcion ) / 4  );
+    //setLimiteMinX(limiteMinX -  (int)getError() );
+    //setLimiteMaxX(limiteMaxX -  (int)getError() );
+    
+    setLimiteMinX(limiteMinX);
+    setLimiteMaxX(limiteMaxX);
+    setPosY(height - (int)(imgNido.height * proporcion - 35));
+    setPosX( getLimiteMinX() );
   }
   
   // Getters
@@ -45,6 +61,14 @@ class Nido{
   
   public int getPosY(){
     return (this.posY);
+  }
+  
+  public void setError(float error){
+    this.error = error;
+  }
+  
+  public float getError(){
+    return (this.error);
   }
   
   // Setters
@@ -70,9 +94,21 @@ class Nido{
   
   // Medodos adicionales
   public void dibujarNido(int posX){
-    pushMatrix();
+    if(posX >= getLimiteMinX() && posX <= getLimiteMaxX() ){
       setPosX(posX);
+    }
+    pushMatrix();
       image(getImgNido(), getPosX(), getPosY());
+    popMatrix();
+  }
+  
+  public void dibujarNido(int posX, float proporcion){
+    if(posX >= getLimiteMinX() && posX <= getLimiteMaxX() ){
+      setPosX(posX);
+    }
+
+    pushMatrix();
+      image(getImgNido(), getPosX(), getPosY(), getImgNido().width * proporcion, getImgNido().height * proporcion);
     popMatrix();
   }
   
@@ -83,10 +119,33 @@ class Nido{
   }  
   
   public void dibujarNido(int posX,int posY){
-    pushMatrix();
+    if(posX >= getLimiteMinX() && posX <= getLimiteMaxX() ){
       setPosX(posX);
       //setPosX(posY);
-      image(getImgNido(), posX, getPosY());
+    }
+    pushMatrix();
+      image( getImgNido(), posX, getPosY() );
     popMatrix();
+  }
+  
+  public void dibujarNido(int posX,int posY, float proporcion){
+    if(posX >= getLimiteMinX() && posX <= getLimiteMaxX() ){
+      setPosX(posX);
+      //setPosX(posY);
+    }
+    pushMatrix();
+      image( getImgNido(), getPosX(), getPosY(), getImgNido().width * proporcion, getImgNido().height * proporcion);
+    popMatrix();
+  }
+  
+  public void dibujarNido(float proporcion){
+    pushMatrix();    
+      //println("Pos X: " + getPosX() + " - Pos Y: " + getPosY() + " - Proporcion Ancho: " + getImgNido().width * proporcion + " - Proporcion Alto: " + getImgNido().height * proporcion );
+      image(getImgNido(), getPosX(), getPosY(), getImgNido().width * proporcion, getImgNido().height * proporcion);
+    popMatrix();
+  }  
+  
+  public String toString(){
+    return("Limite Min X: " + getLimiteMinX() + " - Limite Max X: " + getLimiteMaxX() + " - Pos X: " + getPosX() + " - Pos Y: " + getPosY() );
   }
 }
