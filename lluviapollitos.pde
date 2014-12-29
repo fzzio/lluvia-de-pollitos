@@ -279,16 +279,18 @@ public void verPantallaInstrucciones(){
   if (videoC.available()) {
     videoC.read();
     
-    //loadPixels();
-    //videoC.loadPixels();
-    //video = mirrorImage(videoC);
-    //videoC.updatePixels();
-    //updatePixels();
+    PImage cSmall;
+    loadPixels();
+      videoC.loadPixels();
+        //PImage cSmall = videoC.get(); //en la imagen invertida
+        cSmall =  mirrorImage( videoC.get() ); //en la imagen invertida
+        
+        cSmall.resize(arWidth, arHeight);
+        nya.detect(cSmall); // detect markers in the image
+        
+      videoC.updatePixels();
+    updatePixels();
 
-    // Detecta si hay marcadores de Realidad Aumentada
-    PImage cSmall = videoC.get();
-    cSmall.resize(arWidth, arHeight);
-    nya.detect(cSmall); // detect markers in the image
 
     calibrar();
     
@@ -347,16 +349,17 @@ public void verPantallaJuego(){
   if (videoC.available()) {
     videoC.read();
     
-    //loadPixels();
-    //videoC.loadPixels();
-    //video = mirrorImage(videoC);
-    //videoC.updatePixels();
-    //updatePixels();
-
-    // Detecta si hay marcadores de Realidad Aumentada
-    PImage cSmall = videoC.get();
-    cSmall.resize(arWidth, arHeight);
-    nya.detect(cSmall); // detect markers in the image
+    PImage cSmall;
+    loadPixels();
+      videoC.loadPixels();
+        //PImage cSmall = videoC.get(); //en la imagen invertida
+        cSmall =  mirrorImage( videoC.get() ); //en la imagen invertida
+        
+        cSmall.resize(arWidth, arHeight);
+        nya.detect(cSmall); // detect markers in the image
+        
+      videoC.updatePixels();
+    updatePixels();
 
     dibujarElementos();
 
@@ -734,7 +737,7 @@ public void dibujarCamara(){
   if(seDibujaCamara){
     pushMatrix();
       hint(DISABLE_DEPTH_TEST); // variables de Nayrtoolkit
-        image(videoC, (winWidth - camViewWidth) / 2 , 125, camViewWidth, camViewHeight );
+        image( mirrorImage ( videoC.get() ) , (winWidth - camViewWidth) / 2 , 125, camViewWidth, camViewHeight );
         rect( (winWidth - camViewWidth) / 2 , 125, camViewWidth, camViewHeight );
       hint(ENABLE_DEPTH_TEST);
     popMatrix();
@@ -751,14 +754,10 @@ public void dibujarElementos(){
 
   // Para el marcador 1
   if(nya.isExistMarker( idMarker1 )){
-    println("Hiro");
-    //scale(displayScale);
-    //nya.setARPerspective();
-
-    moverNidoJuego(nidoA, posInicialXA, Math.round(nya.getMarkerVertex2D(idMarker1)[0].x), proporcionNidos );
-
+    //println("Hiro");
     
-
+    moverNidoJuego(nidoA, posInicialXA, Math.round(nya.getMarkerVertex2D(idMarker1)[0].x), proporcionNidos );
+    
   }else{
     pushMatrix();
       loadPixels();
@@ -769,12 +768,10 @@ public void dibujarElementos(){
   
   // Para el marcador 2
   if(nya.isExistMarker( idMarker2 )){
-    println("Kanji");
-
-    PVector vector2 = nya.getMarkerVertex2D(idMarker2)[0];
-    nidoB.dibujarNido(Math.round(vector2.x), proporcionNidos);
-    println(Math.round(vector2.x));
-    //nidoB.dibujarNido(proporcionNidos); 
+    //println("Kanji");
+    
+    moverNidoJuego(nidoB, posInicialXB, Math.round(nya.getMarkerVertex2D(idMarker2)[0].x), proporcionNidos );
+    
   }else{
     pushMatrix();
       loadPixels();
@@ -804,16 +801,15 @@ public void calibrar(){
 }
 
 public void moverNidoJuego(Nido nido, int posCalibradaX, int posActualX, float proporcion){
-  //int minX = nido.getLimiteMinX(), maxX = getLimiteMaxX(), posX = nido.getPosX();
-  
-  println("Pos Actual: " + posActualX);
-  // TODO ARREGLAR
-
-  //int movimiento = posActualX - posCalibradaX;
-
-  //nido.setPosX( nido.getPosX() + movimiento );
-
-  //nido.dibujarNido(proporcion);
-
+  int minX = nido.getLimiteMinX(), maxX = nido.getLimiteMaxX(), posX = nido.getPosX();
+  if(minX==0){  // si es el nido #1
+    println("Pos Actual["+minX+" - "+maxX+"] : " + posActualX);
+  }else{  // si es el nido #2
+    posActualX=posActualX+minX;
+    println("Pos Actual["+minX+" - "+maxX+"] : " + posActualX);
+  }
+  int movimiento = posActualX;
+  //nido.setPosX(  movimiento );
+  nido.dibujarNido(movimiento, proporcion);
 }
 //////////////////////////////////////////////////////////////////////////////
