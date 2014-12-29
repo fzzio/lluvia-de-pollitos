@@ -65,7 +65,7 @@ public int idMarker1, idMarker2;
 
 // Estado del juego
 public final int ESTADO_INTRO = 0, ESTADO_INSTRUCCIONES = 1, ESTADO_JUGANDO = 2, ESTADO_RESUMEN = 3, ESTADO_STAND_BY = 4;
-public int estadoActualJuego = ESTADO_JUGANDO;
+public int estadoActualJuego = ESTADO_INTRO;
 
 // Puntajes
 public int puntosA = 0, puntosB = 0;
@@ -805,11 +805,15 @@ public void calibrar(){
 
 public void moverNidoJuego(Nido nido, int posCalibradaX, int posActualX, float proporcion){
   //int minX = nido.getLimiteMinX(), maxX = getLimiteMaxX(), posX = nido.getPosX();
+  
+  println("Pos Actual: " + posActualX);
+  // TODO ARREGLAR
 
-  int movimiento = posActualX - posCalibradaX;
-  nido.setPosX( nido.getPosX() + movimiento );
+  //int movimiento = posActualX - posCalibradaX;
 
-  nido.dibujarNido(proporcion);
+  //nido.setPosX( nido.getPosX() + movimiento );
+
+  //nido.dibujarNido(proporcion);
 
 }
 //////////////////////////////////////////////////////////////////////////////
