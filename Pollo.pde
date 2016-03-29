@@ -19,7 +19,7 @@ class Pollo{
     setLimiteMaxY(limiteMaxY);
     setVelocidad(0);
     cayendo = false;
-    setPosX((int)random(limiteMinX, limiteMaxX));
+    setPosX((int)random(limiteMinX + 100, limiteMaxX));
     setPosY(0);
   }
   
@@ -102,7 +102,7 @@ class Pollo{
   }
   
   public void detenerCaida(){
-    this.cayendo = true;
+    this.cayendo = false;
   }
   
   // Medodos adicionales
@@ -122,10 +122,10 @@ class Pollo{
   
   // realiza el movimiento de caida del pollo aumentando la coordenada en Y
   public void caer(){
-    int y = getPosY();
-    y = y + (int)velocidad;
+    int y = this.getPosY();
+    y = y + (int)this.velocidad;
     if(y < height){
-      setPosY(y);
+      this.setPosY(y);
     }
   }
 }

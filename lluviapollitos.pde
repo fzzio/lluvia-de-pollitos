@@ -9,7 +9,7 @@
 import java.io.*; // for the loadPathFilenames() function
 import processing.opengl.*;
 import processing.video.*; // para windows
-import codeanticode.gsvideo.*; // para linux
+//import codeanticode.gsvideo.*; // para linux
 import jp.nyatla.nyar4psg.*;
 import javax.swing.*;
 import java.util.*;
@@ -35,8 +35,8 @@ public int arWidth = 640, arHeight = 480; //480 360
 // Para ubicar la posicion de la camara
 public String camPara = "camera_para.dat";
 
-//public Capture videoC; // para windows
-public GSCapture videoC; // para linux
+public Capture videoC; // para windows
+//public GSCapture videoC; // para linux
 public PImage video; // en esta variable mostramos el video invertido
 
 public float ry;
@@ -100,7 +100,7 @@ public boolean seDibujaCamara = false;
 
 void setup(){
   // configuracion de la camara  
-  size(winWidth, winHeight, P3D);
+  size(1366, 768, P3D);
   //size(winWidth,winHeight,OPENGL);//tamaños de la pantalla
   frameRate(90);// para mejorar la velocidad de la imagen por cuadro  o 30
 
@@ -125,8 +125,8 @@ void setup(){
   pollosA = new ArrayList(totalPollos);
   pollosB = new ArrayList(totalPollos);
   for(int i=0; i< totalPollos; i++){
-    pollosA.add(new Pollo(imgPolloCayendo, 0, 418, 590));
-    pollosB.add(new Pollo(imgPolloCayendo, 515, 930, 590));
+    pollosA.add(new Pollo(imgPolloCayendo, 50, 540, 590));
+    pollosB.add(new Pollo(imgPolloCayendo, 715, 1200, 590));
   }
 
   iniciarVideo();
@@ -501,41 +501,42 @@ public void cargarPatrones(){
 
 public void cargarImagenes(){
   // Cargamos las imágenes de las nubes
-  imgNubes[0] = loadImage("img/nube1.png");
-  imgNubes[1] = loadImage("img/nube2.png");
-  imgNubes[2] = loadImage("img/nube3.png");
-  imgNubes[3] = loadImage("img/nube4.png");
+  imgNubes[0] = requestImage("img/nube1.png");
+  imgNubes[1] = requestImage("img/nube2.png");
+  imgNubes[2] = requestImage("img/nube3.png");
+  imgNubes[3] = requestImage("img/nube4.png");
+  //imgNubes[4] = requestImage("img/pollito-cayendo.png");
 
   // Cargamos las imágenes de los objetos erroneos  
-  imgObjetosError[0] = loadImage("img/llanta.png");
-  imgObjetosError[1] = loadImage("img/tabla1.png");
-  imgObjetosError[2] = loadImage("img/tabla2.png");
-  imgObjetosError[3] = loadImage("img/tubo1.png");
-  imgObjetosError[4] = loadImage("img/tubo2.png");
+  imgObjetosError[0] = requestImage("img/llanta.png");
+  imgObjetosError[1] = requestImage("img/tabla1.png");
+  imgObjetosError[2] = requestImage("img/tabla2.png");
+  imgObjetosError[3] = requestImage("img/tubo1.png");
+  imgObjetosError[4] = requestImage("img/tubo2.png");
 
   // Cargamos imágenes del juego
-  imgBGSplash = loadImage("img/splash.jpg");
-  imgBGMecanica = loadImage("img/bgmecanica.jpg");
-  imgBGCampo = loadImage("img/campo.png");
-  imgBGCielo = loadImage("img/cielo.jpg");
+  imgBGSplash = requestImage("img/splash.jpg");
+  imgBGMecanica = requestImage("img/bgmecanica.jpg");
+  imgBGCampo = requestImage("img/campo.png");
+  imgBGCielo = requestImage("img/cielo.jpg");
   
-  imgNidoA = loadImage("img/handblue.png");
-  imgNidoB = loadImage("img/handred.png");
-  imgNidoVacio = loadImage("img/handsinsenal.png");
+  imgNidoA = requestImage("img/handblue.png");
+  imgNidoB = requestImage("img/handred.png");
+  imgNidoVacio = requestImage("img/handsinsenal.png");
 
-  imgContadorA = loadImage("img/contadorblue.png");
-  imgContadorB = loadImage("img/contadorred.png");
+  imgContadorA = requestImage("img/contadorblue.png");
+  imgContadorB = requestImage("img/contadorred.png");
   
-  imgGallina = loadImage("img/gallina.png");
-  imgPolloCayendo = loadImage("img/pollito-cayendo.png");
-  imgPolloAtrapado = loadImage("img/pollito-atrapado.png");
-  imgPolloEnNido = loadImage("img/pollito-en-el-nido.png");
+  imgGallina = requestImage("img/gallina.png");
+  imgPolloCayendo = requestImage("img/pollito-cayendo.png");
+  imgPolloAtrapado = requestImage("img/pollito-atrapado.png");
+  imgPolloEnNido = requestImage("img/pollito-en-el-nido.png");
   
-  imgSeparador = loadImage("img/separador.png");
-  imgError = loadImage("img/x.png");
+  imgSeparador = requestImage("img/separador.png");
+  imgError = requestImage("img/x.png");
 
-  imgFlechaIzq = loadImage("img/arrowleft.png");
-  imgFlechaDer = loadImage("img/arrowright.png");
+  imgFlechaIzq = requestImage("img/arrowleft.png");
+  imgFlechaDer = requestImage("img/arrowright.png");
 }
 
 public void cargarVideos(){
@@ -643,6 +644,7 @@ void dibujarInterfazJuego() {
       image(imgNubes[1], posXNubes[1], 60, imgNubes[1].width * porcentajeNuevo, imgNubes[1].height * porcentajeNuevo);
       image(imgNubes[2], posXNubes[2], 45, imgNubes[2].width * porcentajeNuevo, imgNubes[2].height * porcentajeNuevo);
       image(imgNubes[3], posXNubes[3], 50, imgNubes[3].width * porcentajeNuevo, imgNubes[3].height * porcentajeNuevo);
+      //image(imgNubes[4], posXNubes[4], 30, imgNubes[4].width * porcentajeNuevo, imgNubes[4].height * porcentajeNuevo);
 
       for (int i = 0; i < imgNubes.length; ++i) {
         if (posXNubes[i] >= winWidth) {
@@ -653,8 +655,7 @@ void dibujarInterfazJuego() {
       }
     updatePixels();
   popMatrix();
-
-
+  
   // Para el campo
   pushMatrix();
     loadPixels();
@@ -675,7 +676,15 @@ void dibujarInterfazJuego() {
       noFill();
     updatePixels();
   popMatrix();
-
+  
+  for(int i = 0; i < pollosA.size(); i++){
+    inicializarCaidaPollos((Pollo)pollosA.remove(i)); 
+  }
+  
+  for(int i = 0; i < pollosB.size(); i++){
+    inicializarCaidaPollos((Pollo)pollosB.remove(i));   
+  }
+  
 
   // Dibujar contadores de puntajes
   pushMatrix();
@@ -706,15 +715,31 @@ void dibujarInterfazJuego() {
   popMatrix();
 }
 
+//para pollitos
+public void inicializarCaidaPollos(Pollo polloX){
+  pushMatrix();
+    loadPixels();
+     
+     while(polloX.llegoAlPiso() == false){
+       polloX.dibujarPollo();
+       polloX.caer();
+       polloX.setVelocidad(10);        
+       updatePixels();
+     }
+      
+  popMatrix();
+}
+
 public void iniciarVideo(){
   // to correct for the scale difference between the AR detection coordinates and the size at which the result is displayed
   displayScale = (float) winWidth / arWidth;
   
   
-  //videoC = new Capture(this,capWidth,capHeight,15); // para windows
-  videoC = new GSCapture(this, capWidth, capHeight, "/dev/video0"); // para linux
+  videoC = new Capture(this,capWidth,capHeight,15); // para windows
+  //videoC = new GSCapture(this, capWidth, capHeight, "/dev/video0"); // para linux
   videoC.start();
   
+  /*
   // Mostramos en consola las resoluciones soportadas por la webcam
   println("\nResoluciones soportadas por la webcam");
   int[][] res = videoC.resolutions();
@@ -722,16 +747,19 @@ public void iniciarVideo(){
     println(res[i][0] + "x" + res[i][1]);
   }
   
+  
   // Mostramos en consola los framerates soportados por la webcam
   println("\nFramerates soportados por la webcam");
   String[] fps = videoC.framerates();
   for (int i = 0; i < fps.length; i++) {
     println(fps[i]);
   }
+  */
   
   video = createImage(videoC.width, videoC.height, RGB);
   numPixels = videoC.width * videoC.height;
 }
+
 
 public void dibujarCamara(){
   if(seDibujaCamara){
